@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Trainning.Data;
+using Trainning.Helpers;
 using Trainning.Interfaces;
 using Trainning.Repositories;
 using Trainning.Services;
@@ -19,7 +20,13 @@ public class Program
         builder.Services.AddAuthorization();
         builder.Services.AddEndpointsApiExplorer();
          builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
-      
+         // Đăng ký SQLHelper
+        builder.Services.AddScoped<SQLHelperNoContext>(provider =>
+        {
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            return new SQLHelperNoContext(connectionString);
+        });
+
 
         // builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepositoryLocal<,>));
 

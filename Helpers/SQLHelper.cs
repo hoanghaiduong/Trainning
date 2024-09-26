@@ -1,15 +1,16 @@
 using System.Data;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Trainning.Data;
 
 namespace Trainning.Helpers
 {
   
     public class SQLHelper
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public SQLHelper(DbContext context)
+        public SQLHelper(ApplicationDbContext context)
         {
             _context = context;
         }

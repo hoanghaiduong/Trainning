@@ -1,6 +1,10 @@
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Trainning.Data;
 using Trainning.DTO;
 using Trainning.Entities;
+using Trainning.Helpers;
 using Trainning.Services;
 
 namespace Trainning.Controllers
@@ -10,10 +14,12 @@ namespace Trainning.Controllers
     public class BookController : ControllerBase
     {
         private readonly BookService _bookService;
+        private readonly SQLHelperNoContext _sql;
 
-        public BookController(BookService bookService)
+        public BookController(BookService bookService, SQLHelperNoContext sql)
         {
             _bookService = bookService;
+            _sql = sql;
         }
 
         [HttpGet]
@@ -22,7 +28,12 @@ namespace Trainning.Controllers
             var books = await _bookService.GetAllBooksAsync();
             return Ok(books);
         }
-
+        [HttpGet("books/sql")]
+        public async Task<IActionResult> GetAllBooksWithSQL()
+        {
+          var books=await _sql.ExecuteQueryAsync("SELECT * FROM books");
+          return Ok(new {books});
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBookById(int id)
         {
@@ -57,7 +68,7 @@ namespace Trainning.Controllers
             {
                 var book = new Book()
                 {
-                    
+
                     Title = dto.Title,
                     Author = dto.Author,
                     PublishedDate = dto.PublishedDate,
