@@ -1,11 +1,39 @@
 {
   "Version": 1,
-  "Hash": "Bxm2zkmc9T2Dc3XURB79DhgSDZkQhxm3c1Xf0fy0D4I=",
+  "Hash": "Lcx8Bt9tHMTGBO92UV+xCIq0XVCrsmRA9knc4t/CnHA=",
   "Source": "Trainning",
   "BasePath": "_content/Trainning",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "Trainning\\wwwroot",
+      "Source": "Trainning",
+      "ContentRoot": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\wwwroot\\",
+      "BasePath": "_content/Trainning",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\wwwroot\\uploads\\images\\users\\avatars\\b3004a55-e004-40fd-b0e4-2ba8a66bdfcd_mcpvcd9.jpg",
+      "SourceId": "Trainning",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\wwwroot\\",
+      "BasePath": "_content/Trainning",
+      "RelativePath": "uploads/images/users/avatars/b3004a55-e004-40fd-b0e4-2ba8a66bdfcd_mcpvcd9.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\images\\users\\avatars\\b3004a55-e004-40fd-b0e4-2ba8a66bdfcd_mcpvcd9.jpg"
+    }
+  ]
 }

@@ -141,3 +141,5 @@ C:\Users\LH COMPUTER\Desktop\Trainning\bin\Debug\net8.0\ru\Microsoft.CodeAnalysi
 C:\Users\LH COMPUTER\Desktop\Trainning\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\LH COMPUTER\Desktop\Trainning\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\LH COMPUTER\Desktop\Trainning\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\LH COMPUTER\Desktop\Trainning\bin\Debug\net8.0\Trainning.staticwebassets.runtime.json
+c:\Users\LH COMPUTER\Desktop\Trainning\bin\Debug\net8.0\BCrypt.Net-Next.dll

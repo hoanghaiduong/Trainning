@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {}
+    "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {
+    "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
+        "projectUniqueName": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
         "projectName": "Trainning",
-        "projectPath": "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
+        "projectPath": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
         "packagesPath": "C:\\Users\\LH COMPUTER\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\obj\\",
+        "outputPath": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 22.1\\Components\\Offline Packages",
@@ -53,6 +53,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.8, )"
@@ -73,7 +77,15 @@
               "target": "Package",
               "version": "[8.0.8, )"
             },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[8.0.8, )"
             },

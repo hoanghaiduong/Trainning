@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\wwwroot\\uploads\\images\\users\\avatars\\b3004a55-e004-40fd-b0e4-2ba8a66bdfcd_mcpvcd9.jpg",
+      "PackagePath": "staticwebassets\\uploads\\images\\users\\avatars\\b3004a55-e004-40fd-b0e4-2ba8a66bdfcd_mcpvcd9.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Trainning.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Trainning.props",
+      "PackagePath": "build\\Trainning.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Trainning.props",
+      "PackagePath": "buildMultiTargeting\\Trainning.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Trainning.props",
+      "PackagePath": "buildTransitive\\Trainning.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

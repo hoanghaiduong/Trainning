@@ -57,13 +57,15 @@ namespace Trainning.Helpers
             _transaction?.Rollback();
             _transaction = null; // Reset transaction sau khi rollback
         }
-        // Phương thức thực hiện truy vấn SELECT và trả về DataTable
-        public async Task<DataTable> ExecuteQueryAsync(string query, SqlParameter[]? parameters = null)
+        // Phương thức thực hiện truy vấn SELECT và trả về DataTable // Phương thức thực hiện truy vấn SELECT và trả về DataTable
+        public async Task<DataTable> ExecuteQueryAsync(string query, CommandType commandType, SqlParameter[]? parameters = null)
         {
             await OpenConnectionAsync();
 
             using (SqlCommand command = new SqlCommand(query, _connection))
             {
+                command.CommandType = commandType; // Thêm dòng này để thiết lập loại lệnh
+
                 if (_transaction != null)
                 {
                     command.Transaction = _transaction;
@@ -84,12 +86,14 @@ namespace Trainning.Helpers
         }
 
         // Phương thức thực hiện các truy vấn không trả về dữ liệu (INSERT, UPDATE, DELETE)
-        public async Task<int> ExecuteNonQueryAsync(string query, SqlParameter[] parameters = null)
+        public async Task<int> ExecuteNonQueryAsync(string query, CommandType commandType, SqlParameter[] parameters = null)
         {
             await OpenConnectionAsync();
 
             using (SqlCommand command = new SqlCommand(query, _connection))
             {
+                command.CommandType = commandType; // Thêm dòng này để thiết lập loại lệnh
+
                 if (_transaction != null)
                 {
                     command.Transaction = _transaction;
@@ -105,12 +109,14 @@ namespace Trainning.Helpers
         }
 
         // Phương thức thực hiện truy vấn scalar (trả về giá trị đơn lẻ)
-        public async Task<object> ExecuteScalarAsync(string query, SqlParameter[] parameters = null)
+        public async Task<object> ExecuteScalarAsync(string query, CommandType commandType, SqlParameter[] parameters = null)
         {
             await OpenConnectionAsync();
 
             using (SqlCommand command = new SqlCommand(query, _connection))
             {
+                command.CommandType = commandType; // Thêm dòng này để thiết lập loại lệnh
+
                 if (_transaction != null)
                 {
                     command.Transaction = _transaction;
@@ -126,12 +132,14 @@ namespace Trainning.Helpers
         }
 
         // Phương thức lấy DataReader (để xử lý dữ liệu từng hàng, nếu cần)
-        public async Task<SqlDataReader> ExecuteReaderAsync(string query, SqlParameter[] parameters = null)
+        public async Task<SqlDataReader> ExecuteReaderAsync(string query, CommandType commandType, SqlParameter[] parameters = null)
         {
             await OpenConnectionAsync();
 
             using (SqlCommand command = new SqlCommand(query, _connection))
             {
+                command.CommandType = commandType; // Thêm dòng này để thiết lập loại lệnh
+
                 if (_transaction != null)
                 {
                     command.Transaction = _transaction;
@@ -145,7 +153,6 @@ namespace Trainning.Helpers
                 return await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
             }
         }
-
         // Dispose để dọn dẹp tài nguyên
         public void Dispose()
         {
