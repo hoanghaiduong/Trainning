@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {}
+    "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {}
   },
   "projects": {
-    "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {
+    "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
+        "projectUniqueName": "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
         "projectName": "Trainning",
-        "projectPath": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
+        "projectPath": "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\Trainning.csproj",
         "packagesPath": "C:\\Users\\LH COMPUTER\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\LH COMPUTER\\Desktop\\Trainning\\obj\\",
+        "outputPath": "C:\\Users\\LH COMPUTER\\Desktop\\Trainning\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 22.1\\Components\\Offline Packages",

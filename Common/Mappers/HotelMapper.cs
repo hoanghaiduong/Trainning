@@ -9,6 +9,7 @@ namespace Trainning.Common.Mappers
     {
         public static HotelDTO ToHotelDTO(this Hotel hotel){
             return new HotelDTO{
+                Id=hotel.Id,
                 Name = hotel.Name,
                 Address = hotel.Address,
                 Phone = hotel.Phone,

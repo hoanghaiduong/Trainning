@@ -46,7 +46,7 @@ namespace Trainning.Controllers
         {
             try
             {
-                var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == id);
+                var room = await _context.Rooms.Include(i => i.Hotel).Include(i => i.RoomType).FirstOrDefaultAsync(x => x.Id == id);
                 if (room == null) return Results.NotFound();
                 var roomResult = room.ToRoomDTO();
                 return Results.Ok(new { data = roomResult });
@@ -57,18 +57,42 @@ namespace Trainning.Controllers
             }
         }
         [HttpPost]
-        public async Task<IResult> CreateRoom([FromForm] CreateRoomDTO dto)
+        public async Task<IResult> CreateRoom([FromForm] CreateRoomDTO dto, [FromQuery] EStatusRoom eStatus = EStatusRoom.AVAILABLE)
         {
             var thumbnail = string.Empty;
             List<string> images = [];
             try
             {
-
-
                 var hotel = await _context.Hotels.FirstOrDefaultAsync(x => x.Id == dto.HotelID);
-                if (hotel == null) return Results.NotFound();
+                if (hotel == null)
+                {
+                    // Delete files if hotel is not found
+                    if (!string.IsNullOrEmpty(thumbnail))
+                    {
+                        _fileUploadService.DeleteSingleFile(thumbnail);
+                    }
+
+                    if (images.Count > 0)
+                    {
+                        _fileUploadService.DeleteMultipleFiles(images);
+                    }
+                    return Results.NotFound();
+                }
                 var roomType = await _context.RoomTypes.FirstOrDefaultAsync(x => x.Id == dto.RoomTypeId);
-                if (roomType == null) return Results.NotFound();
+                if (roomType == null)
+                {
+                    // Delete files if room type is not found
+                    if (!string.IsNullOrEmpty(thumbnail))
+                    {
+                        _fileUploadService.DeleteSingleFile(thumbnail);
+                    }
+
+                    if (images.Count > 0)
+                    {
+                        _fileUploadService.DeleteMultipleFiles(images);
+                    }
+                    return Results.NotFound();
+                }
                 if (dto.Thumbnail != null)
                 {
                     thumbnail = await _fileUploadService.UploadSingleFile(["uploads", "images", "rooms", "thumbnail"], dto.Thumbnail);
@@ -85,7 +109,7 @@ namespace Trainning.Controllers
                     Images = images,
                     Hotel = hotel,
                     RoomType = roomType,
-                    Status = dto.Status
+                    Status = eStatus
                 };
                 await _context.Rooms.AddAsync(newRoom);
                 await _context.SaveChangesAsync();

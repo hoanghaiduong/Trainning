@@ -6,6 +6,7 @@ namespace Trainning.DTO
 {
     public class BookingDTO
     {
+        public int Id { get; set; }
         [JsonIgnore]
         public int UserId { get; set; }
         [JsonIgnore]

@@ -214,11 +214,11 @@ namespace Trainning.Controllers
 
 
                 // Update hotel entity with new data
-                hotel.Name = dto.Name;
+                hotel.Name = !string.IsNullOrEmpty(dto.Name) ? dto.Name : hotel.Name;
                 hotel.Thumbnail = thumbnail;
-                hotel.Address = dto.Address;
-                hotel.Phone = dto.Phone;
-                hotel.Email = dto.Email;
+                hotel.Address = !string.IsNullOrEmpty(dto.Address) ? dto.Address : hotel.Address;
+                hotel.Phone = !string.IsNullOrEmpty(dto.Phone)?dto.Phone : hotel.Phone;
+                hotel.Email =  !string.IsNullOrEmpty(dto.Email)?dto.Email: hotel.Email;
                 hotel.Images = newImages;
                 hotel.Stars = dto.Stars;
                 hotel.CheckinTime = dto.CheckinTime;
@@ -226,7 +226,7 @@ namespace Trainning.Controllers
 
                 // Save changes
                 _context.Hotels.Update(hotel);
-                await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync();
 
                 return Results.Ok(new { data = hotel.ToHotelDTO() });
             }

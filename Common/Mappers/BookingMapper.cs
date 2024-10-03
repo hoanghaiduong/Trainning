@@ -10,6 +10,7 @@ namespace Trainning.Common.Mappers
         {
             return new BookingDTO
             {
+                Id = booking.Id,
                 UserId = booking.UserId,
                 RoomId = booking.RoomId,
                 CheckinDate = booking.CheckinDate,
