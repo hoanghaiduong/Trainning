@@ -17,6 +17,7 @@ namespace Trainning.Entities
         public bool? EmailVerified { get; set; } = false;
         public string? Phone { get; set; } = null!;
         public string? Avatar { get; set; } = null!;
+        [JsonIgnore]
         public string? RefreshToken { get; set; } = null!;
         public bool IsDisabled { get; set; } = false;
         public DateTime? LastLogin { get; set; }
