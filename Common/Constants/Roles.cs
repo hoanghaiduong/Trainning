@@ -4,6 +4,6 @@ namespace Trainning.Common.Constants
     {
         public const string Administrator = nameof(Administrator);
         public const string Employee = nameof(Employee);
-        public const string Guest = nameof(Guest);
+        // public const string Guest = nameof(Guest);
     }
 }

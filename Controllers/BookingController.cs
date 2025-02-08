@@ -1,7 +1,11 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Trainning.Common.Mappers;
 using Trainning.Data;
+using Trainning.DTO.Creates;
+using Trainning.DTO.Updates;
+using Trainning.Entities;
 using Trainning.Interfaces;
 
 namespace Trainning.Controllers
@@ -22,7 +26,12 @@ namespace Trainning.Controllers
         {
             try
             {
-                return Results.Ok();
+                var bookings = (await _context.Bookings.Include(r => r.User).Include(r => r.Room).Include(r => r.Payments).ToListAsync()).Select(x => x.ToBookingDTO());
+                return Results.Ok(new
+                {
+                    message = "Get All Bookings",
+                    data = bookings
+                });
             }
             catch (Exception ex)
             {
@@ -31,11 +40,20 @@ namespace Trainning.Controllers
             }
         }
         [HttpGet]
-        public async Task<IResult> GetBooking()
+        public async Task<IResult> GetBooking([FromQuery] int id)
         {
             try
             {
-                return Results.Ok();
+                var booking = await _context.Bookings.Include(r => r.User).Include(r => r.Room).Include(r => r.Payments).FirstOrDefaultAsync(x => x.Id == id);
+                if (booking == null)
+                {
+                    return Results.NotFound(new { message = "Booking Not Found" });
+                }
+                return Results.Ok(new
+                {
+                    message = "Get Booking Successfully",
+                    data = booking
+                });
             }
             catch (Exception ex)
             {
@@ -44,11 +62,37 @@ namespace Trainning.Controllers
             }
         }
         [HttpPost]
-        public async Task<IResult> CreateBooking()
+        public async Task<IResult> CreateBooking([FromBody] CreateBookingDTO dto)
         {
             try
             {
-                return Results.Ok();
+               
+                var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == dto.RoomId);
+                if (room == null)
+                {
+                    return Results.NotFound(new { message = "Room Not Found" });
+                }
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
+                if (user == null)
+                {
+                    return Results.NotFound(new { message = "User Not Found" });
+                }
+
+                var newBooking = new Booking
+                {
+                    Room = room,
+                    User = user,
+                    CheckinDate = dto.CheckinDate,
+                    CheckoutDate = dto.CheckoutDate,
+                    TotalPrice = dto.TotalPrice,
+                };
+                var inserted = await _context.Bookings.AddAsync(newBooking);
+                await _context.SaveChangesAsync();
+                return Results.Ok(new
+                {
+                    message = "Created new booking successfully!",
+                    data = newBooking.ToBookingDTO()
+                });
             }
             catch (Exception ex)
             {
@@ -57,11 +101,49 @@ namespace Trainning.Controllers
             }
         }
         [HttpPut]
-        public async Task<IResult> UpdateBooking()
+        public async Task<IResult> UpdateBooking([FromQuery] int id, [FromBody] UpdateBookingDTO dto)
         {
             try
             {
-                return Results.Ok();
+                var booking = await _context.Bookings.Include(r => r.User).Include(r => r.Room).Include(r => r.Payments).FirstOrDefaultAsync(x => x.Id == id);
+                if (booking == null)
+                {
+                    return Results.NotFound(new { message = "Booking Not Found" });
+                }
+                if (dto.RoomId != null)
+                {
+                    var room = await _context.Rooms.FirstOrDefaultAsync(x => x.Id == dto.RoomId);
+                    if (room == null)
+                    {
+                        return Results.NotFound(new { message = "Room Not Found" });
+                    }
+                    else
+                    {
+                        booking.Room = room;
+                    }
+                }
+                if (dto.UserId != null)
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
+                    if (user == null)
+                    {
+                        return Results.NotFound(new { message = "User Not Found" });
+                    }
+                    else
+                    {
+                        booking.User = user;
+                    }
+                }
+                booking.CheckinDate = dto.CheckinDate ?? booking.CheckinDate;
+                booking.CheckoutDate = dto.CheckoutDate ?? booking.CheckoutDate;
+                booking.TotalPrice = dto.TotalPrice ?? booking.TotalPrice;
+                var updated = _context.Bookings.Update(booking);
+                await _context.SaveChangesAsync();
+                return Results.Ok(new
+                {
+                    Message = "Update Booking Successfully",
+                    Data = booking.ToBookingDTO()
+                });
             }
             catch (Exception ex)
             {

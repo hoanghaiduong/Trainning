@@ -21,6 +21,7 @@ namespace Trainning.DTO
         public string? RefreshToken { get; set; } = null!;
         public bool IsDisabled { get; set; } = false;
         public DateTime? LastLogin { get; set; }
+        public virtual Hotel? Hotel { get; set; } = null!;
         public List<Role> Roles { get; set; } = null!;
         public virtual IList<Booking> Bookings { get; set; } = [];
     }

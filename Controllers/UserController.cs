@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Trainning.Common;
+using Trainning.Common.Extensions;
 using Trainning.Common.Mappers;
 using Trainning.Data;
 using Trainning.DTO;
 using Trainning.DTO.Updates;
 using Trainning.Entities;
 using Trainning.Interfaces;
+using Trainning.Models;
 using Trainning.Services;
 
 namespace Trainning.Controllers
@@ -25,13 +27,32 @@ namespace Trainning.Controllers
             _context = context;
         }
         [HttpGet("all")]
-        public async Task<IResult> GetUsers()
+        public async Task<IResult> GetUsers([FromQuery] PaginationModel paginate)
         {
             try
             {
-                var users = await _context.Users.Include(x => x.UserRoles).ThenInclude(x=>x.Role).Include(x => x.Bookings).ToListAsync();
-                var results = users.Select(x => x.ToUserDTO());
-                return Results.Ok(new { Message = "Get User Success", Data = results });
+                var users = _context.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).Include(x => x.Bookings).AsQueryable();
+
+                // Apply search filtering if provided, before projecting to DTO
+                if (!string.IsNullOrEmpty(paginate.Search))
+                {
+                    users = users.Where(x =>
+                 x.FirstName.Contains(paginate.Search) ||
+                 x.LastName.Contains(paginate.Search) ||
+                 x.Email.Contains(paginate.Search) ||
+                 x.Phone.Contains(paginate.Search)||
+                 x.Username.Contains(paginate.Search)
+                 );
+                }
+
+                // Project to DTOs after filtering
+                var usersDTOQuery = users.Select(x => x.ToUserDTO());
+
+
+                // Áp dụng phân trang trên IQueryable trước khi gọi ToListAsync
+                var usersPaginated = await usersDTOQuery.ToPaginatedResultAsync(paginate);
+
+                return Results.Ok(new { Message = "Get User Success", Data = usersPaginated });
             }
             catch (Exception ex)
             {
@@ -43,7 +64,7 @@ namespace Trainning.Controllers
         {
             try
             {
-                var user = await _context.Users.Include(x => x.UserRoles).ThenInclude(x=>x.Role).Include(x => x.Bookings).FirstOrDefaultAsync(x => x.Id == id);
+                var user = await _context.Users.Include(x => x.UserRoles).ThenInclude(x => x.Role).Include(x => x.Bookings).FirstOrDefaultAsync(x => x.Id == id);
                 if (user == null) return Results.NotFound();
                 return Results.Ok(new { Message = "Get User Success", Data = user.ToUserDTO() });
             }
@@ -53,12 +74,18 @@ namespace Trainning.Controllers
             }
         }
         [HttpPost]
-        public async Task<IResult> CreateUser([FromForm] CreateUserDTO dto, CancellationToken cancellationToken)
+        public async Task<IResult> CreateUser([FromForm] CreateUserDTO dto)
         {
             var avatar = string.Empty;
-
+            Hotel hotel = null!;
             try
             {
+                if (dto.HotelId != null)
+                {
+                    var hotelFind = await _context.Hotels.FirstOrDefaultAsync(x => x.Id == dto.HotelId);
+                    if (hotelFind == null) return Results.NotFound(new { Message = "Hotel not found" });
+                    hotel = hotelFind;
+                }
                 if (dto.Avatar != null)
                 {
                     avatar = await _fileUploadService.UploadSingleFile(new[] { "uploads", "images", "users", "avatars" }, dto.Avatar);
@@ -73,14 +100,15 @@ namespace Trainning.Controllers
                     Email = dto.Email,
                     Phone = dto.Phone,
                     Avatar = avatar,
+                    Hotel = hotel
                 };
                 // Save the new user to the database to generate the User ID
-                await _context.Users.AddAsync(newUser, cancellationToken);
+                await _context.Users.AddAsync(newUser);
 
-                await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync();
                 if (dto.RoleIDs != null && dto.RoleIDs.Count > 0)
                 {
-                    var roles = await _context.Roles.Where(x => dto.RoleIDs.Contains(x.Id)).ToListAsync(cancellationToken);
+                    var roles = await _context.Roles.Where(x => dto.RoleIDs.Contains(x.Id)).ToListAsync();
                     // Find missing RoleIDs
                     var missingRoleIds = dto.RoleIDs.Except(roles.Select(r => r.Id)).ToList();
 
@@ -105,8 +133,8 @@ namespace Trainning.Controllers
                                 UserId = newUser.Id
                             });
                         }
-                        await _context.UserRoles.AddRangeAsync(userRoles, cancellationToken);
-                        await _context.SaveChangesAsync(cancellationToken);
+                        await _context.UserRoles.AddRangeAsync(userRoles);
+                        await _context.SaveChangesAsync();
                     }
                     // Add the roles to the user
 
@@ -136,10 +164,19 @@ namespace Trainning.Controllers
         public async Task<IResult> UpdateUser([FromQuery] int id, [FromForm] UpdateUserDTO dto)
         {
             var newAvatar = string.Empty;
+
             try
             {
-                var user = await _context.Users.Include(r=>r.Bookings).Include(r=>r.UserRoles).ThenInclude(r=>r.Role).FirstOrDefaultAsync(u => u.Id == id);
+
+                var user = await _context.Users.Include(r => r.Hotel).Include(r => r.Bookings).Include(r => r.UserRoles).ThenInclude(r => r.Role).FirstOrDefaultAsync(u => u.Id == id);
                 if (user == null) return Results.NotFound();
+
+                if (dto.HotelId != null)
+                {
+                    var hotel = await _context.Hotels.FirstOrDefaultAsync(x => x.Id == dto.HotelId);
+                    if (hotel == null) return Results.NotFound(new { Message = "Hotel not found" });
+                    user.Hotel = hotel;
+                }
                 if (!string.IsNullOrEmpty(user.Avatar) && dto.Avatar != null)
                 {
                     //có ảnh cũ và có nhập ảnh mới thì xoá ảnh cũ di
@@ -184,7 +221,7 @@ namespace Trainning.Controllers
                 }
                 _context.Users.Update(user);
                 await _context.SaveChangesAsync();
-                
+
                 return Results.Ok(new
                 {
                     Message = "Update user successfully",
@@ -223,7 +260,7 @@ namespace Trainning.Controllers
             }
             catch (Exception ex)
             {
-                  return Results.BadRequest(new { ex.Message, detail = ex.InnerException.Message });
+                return Results.BadRequest(new { ex.Message, detail = ex.InnerException.Message });
             }
         }
     }

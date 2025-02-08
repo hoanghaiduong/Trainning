@@ -1,11 +1,14 @@
 
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Trainning.Common.Extensions;
 using Trainning.Common.Mappers;
 using Trainning.Data;
 using Trainning.DTO;
 using Trainning.DTO.Updates;
 using Trainning.Entities;
+using Trainning.Models;
 
 
 namespace Trainning.Controllers
@@ -22,19 +25,35 @@ namespace Trainning.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IResult> GetRoomTypes()
+        public async Task<IResult> GetRoomTypes([FromQuery] PaginationModel paginate)
         {
             try
             {
-                var roomTypes = (await _context.RoomTypes.Include(r => r.Rooms).ToListAsync()).Select(x => x.ToRoomTypeDTO());
-                return Results.Ok(new { data = roomTypes });
+
+                // Start with the query for RoomTypes including related Rooms
+                var roomTypesQuery = _context.RoomTypes.Include(r => r.Rooms).AsQueryable();
+
+                // Apply search filtering if provided, before projecting to DTO
+                if (!string.IsNullOrEmpty(paginate.Search))
+                {
+                    roomTypesQuery = roomTypesQuery.Where(r => r.Name.Contains(paginate.Search));
+                }
+
+                // Project to DTOs after filtering
+                var roomTypesDTOQuery = roomTypesQuery.Select(x => x.ToRoomTypeDTO());
+
+
+                // Áp dụng phân trang trên IQueryable trước khi gọi ToListAsync
+                var roomTypesPaginated = await roomTypesDTOQuery.ToPaginatedResultAsync(paginate);
+
+                return Results.Ok(new { roomTypesPaginated });
             }
             catch (Exception ex)
             {
-                return Results.BadRequest(new { ex });
-                throw;
+                return Results.BadRequest(new { message = ex.Message });
             }
         }
+
         [HttpGet]
         public async Task<IResult> GetRoomType([FromQuery] int id)
         {

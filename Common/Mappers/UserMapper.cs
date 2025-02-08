@@ -22,7 +22,7 @@ namespace Trainning.Common.Mappers
                 RefreshToken = user.RefreshToken,
                 LastLogin = user.LastLogin,
                 Roles=roles,
-                // UserRoles=user.UserRoles,
+                Hotel=user.Hotel,
                 Bookings = user.Bookings
             };
         }

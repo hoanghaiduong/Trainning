@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Trainning.Common.Mappers;
 using Trainning.Data;
 using Trainning.DTO;
+using Trainning.Entities;
 using Trainning.Helpers;
 using Trainning.Models;
 using Trainning.Services;
@@ -159,7 +160,42 @@ namespace Trainning.Controllers
                 RefreshToken = newRefreshToken
             });
         }
+        [HttpPost("sign-up")]
+        public async Task<IResult> SignUpAsync([FromBody] AuthDTO dto)
+        {
+            try
+            {
+                // Kiểm tra các trường cần thiết
+                if (string.IsNullOrEmpty(dto.Email) || string.IsNullOrEmpty(dto.Password))
+                {
+                    return Results.BadRequest(new { error = "Email and Password are required." });
+                }
+                var user = new User
+                {
+                    Email = dto.Email,
+                    Password = HashService.EnhancedHashPassword(dto.Password),
+                    Username = dto?.Username,
+                };
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+           
+             
+                return Results.Ok(new
+                {
+                    Message = "Sign Up Successfully",
+                    Data = user.ToUserDTO(),
 
+                });
+            }
+            catch (System.Exception ex)
+            {
+
+                return Results.BadRequest(new
+                {
+                    Error = ex.Message
+                });
+            }
+        }
         [HttpPost("sign-in")]
         public async Task<IResult> SignIn([FromBody] AuthDTO dto)
         {

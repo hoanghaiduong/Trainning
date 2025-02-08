@@ -4,6 +4,7 @@ namespace Trainning.DTO
 {
     public record CreateUserDTO
     {
+        public int? HotelId { get; set; }
         public string? FirstName { get; set; } = null!;
         public string? LastName { get; set; } = null!;
         [Required(ErrorMessage = "Email is required")]

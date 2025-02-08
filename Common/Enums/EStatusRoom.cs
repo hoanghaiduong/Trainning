@@ -5,7 +5,7 @@ namespace Trainning.Common.Enums
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum EStatusRoom
     {
-        AVAILABLE,
-        UNAVAILABLE,
+        AVAILABLE = 1,
+        UNAVAILABLE = 0,
     }
 }

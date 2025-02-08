@@ -18,7 +18,7 @@ namespace Trainning.Common.Mappers
                 TotalPrice = booking.TotalPrice,
                 User = booking.User,
                 Room = booking.Room,
-                Payments = booking.Payments
+                Payments = booking.Payments ?? []
             };
         }
     }

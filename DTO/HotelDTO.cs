@@ -16,6 +16,7 @@ namespace Trainning.DTO
         public int Stars { get; set; }
         public string? CheckinTime { get; set; } = DateTime.Now.ToString();
         public string? CheckoutTime { get; set; } = DateTime.Now.ToString();
+          public virtual IList<User> Users { get; set; } = [];
         public virtual IList<Room> Rooms { get; set; } = [];
     }
 }

@@ -55,15 +55,15 @@ namespace Trainning.Data
             // Default roles
             var administratorRole = new Role { Name = Roles.Administrator };
             var employeeRole = new Role { Name = Roles.Employee };
-            var guestRole = new Role { Name = Roles.Employee };
+            // var guestRole = new Role { Name = Roles.Guest };
             if (!_context.Roles.Any())
             {
                 _context.Roles.Add(administratorRole);
                 _context.Roles.Add(employeeRole);
-                _context.Roles.Add(guestRole);
+                // _context.Roles.Add(guestRole);
                 await _context.SaveChangesAsync();
             }
-         
+
         }
     }
 }

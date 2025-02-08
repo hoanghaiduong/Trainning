@@ -12,8 +12,7 @@ namespace Trainning.DTO
         public int BookingId { get; set; }
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
-        public EPaymentMethod PaymentMethod { get; set; }=EPaymentMethod.Cash;
-
-        public virtual Booking Booking { get; set; }
+        public EPaymentMethod PaymentMethod { get; set; } = EPaymentMethod.Cash;
+        public virtual Booking Booking { get; set; } = null!;
     }
 }

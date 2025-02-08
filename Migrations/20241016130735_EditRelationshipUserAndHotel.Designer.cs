@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trainning.Data;
 
@@ -11,9 +12,11 @@ using Trainning.Data;
 namespace Trainning.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241016130735_EditRelationshipUserAndHotel")]
+    partial class EditRelationshipUserAndHotel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,7 +274,10 @@ namespace Trainning.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HotelId")
+                    b.Property<string>("HotelId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HotelId1")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDisabled")
@@ -304,7 +310,7 @@ namespace Trainning.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("HotelId");
+                    b.HasIndex("HotelId1");
 
                     b.HasIndex("Phone")
                         .IsUnique()
@@ -385,7 +391,7 @@ namespace Trainning.Migrations
                 {
                     b.HasOne("Trainning.Entities.Hotel", "Hotel")
                         .WithMany("Users")
-                        .HasForeignKey("HotelId");
+                        .HasForeignKey("HotelId1");
 
                     b.Navigation("Hotel");
                 });

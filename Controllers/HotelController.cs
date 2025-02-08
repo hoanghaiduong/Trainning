@@ -28,7 +28,9 @@ namespace Trainning.Controllers
         {
             try
             {
-                var hotels = (await _context.Hotels.Include(r => r.Rooms).ToListAsync()).Select(s => s.ToHotelDTO());
+                var hotels = (await _context.Hotels.Include(r=>r.Users).Include(r => r.Rooms).ToListAsync()).Select(s => s.ToHotelDTO());
+             
+
                 return Results.Ok(new { data = hotels });
             }
             catch (Exception ex)
@@ -42,7 +44,7 @@ namespace Trainning.Controllers
         {
             try
             {
-                var hotel = (await _context.Hotels.Include(r => r.Rooms).FirstOrDefaultAsync(x => x.Id == id))?.ToHotelDTO();
+                var hotel = (await _context.Hotels.Include(r=>r.Users).Include(r => r.Rooms).FirstOrDefaultAsync(x => x.Id == id))?.ToHotelDTO();
 
                 return Results.Ok(new { data = hotel });
             }
